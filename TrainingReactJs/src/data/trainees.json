@@ -1,0 +1,203 @@
+[
+  {
+    "id": "trainee-1",
+    "email": "trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Jane Trainee",
+    "phone": "1234568000",
+    "department": "Engineering",
+    "employeeId": "EMP001"
+  },
+  {
+    "id": "trainee-2",
+    "email": "alex.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Alex Smith",
+    "phone": "1234568001",
+    "department": "Engineering",
+    "employeeId": "EMP002"
+  },
+  {
+    "id": "trainee-3",
+    "email": "maria.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Maria Garcia",
+    "phone": "1234568002",
+    "department": "Engineering",
+    "employeeId": "EMP003"
+  },
+  {
+    "id": "trainee-4",
+    "email": "john.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "John Doe",
+    "phone": "1234568003",
+    "department": "Engineering",
+    "employeeId": "EMP004"
+  },
+  {
+    "id": "trainee-5",
+    "email": "sophia.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Sophia Brown",
+    "phone": "1234568004",
+    "department": "Engineering",
+    "employeeId": "EMP005"
+  },
+  {
+    "id": "trainee-6",
+    "email": "michael.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Michael Johnson",
+    "phone": "1234568005",
+    "department": "Engineering",
+    "employeeId": "EMP006"
+  },
+  {
+    "id": "trainee-7",
+    "email": "emma.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Emma Wilson",
+    "phone": "1234568006",
+    "department": "Engineering",
+    "employeeId": "EMP007"
+  },
+  {
+    "id": "trainee-8",
+    "email": "daniel.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Daniel Martinez",
+    "phone": "1234568007",
+    "department": "Engineering",
+    "employeeId": "EMP008"
+  },
+  {
+    "id": "trainee-9",
+    "email": "olivia.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Olivia Anderson",
+    "phone": "1234568008",
+    "department": "Engineering",
+    "employeeId": "EMP009"
+  },
+  {
+    "id": "trainee-10",
+    "email": "james.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "James Taylor",
+    "phone": "1234568009",
+    "department": "Engineering",
+    "employeeId": "EMP010"
+  },
+  {
+    "id": "trainee-11",
+    "email": "isabella.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Isabella Thomas",
+    "phone": "1234568010",
+    "department": "Engineering",
+    "employeeId": "EMP011"
+  },
+  {
+    "id": "trainee-12",
+    "email": "william.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "William Jackson",
+    "phone": "1234568011",
+    "department": "Engineering",
+    "employeeId": "EMP012"
+  },
+  {
+    "id": "trainee-13",
+    "email": "ava.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Ava White",
+    "phone": "1234568012",
+    "department": "Engineering",
+    "employeeId": "EMP013"
+  },
+  {
+    "id": "trainee-14",
+    "email": "henry.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Henry Harris",
+    "phone": "1234568013",
+    "department": "Engineering",
+    "employeeId": "EMP014"
+  },
+  {
+    "id": "trainee-15",
+    "email": "mia.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Mia Martin",
+    "phone": "1234568014",
+    "department": "Engineering",
+    "employeeId": "EMP015"
+  },
+  {
+    "id": "trainee-16",
+    "email": "benjamin.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Benjamin Thompson",
+    "phone": "1234568015",
+    "department": "Engineering",
+    "employeeId": "EMP016"
+  },
+  {
+    "id": "trainee-17",
+    "email": "charlotte.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Charlotte Garcia",
+    "phone": "1234568016",
+    "department": "Engineering",
+    "employeeId": "EMP017"
+  },
+  {
+    "id": "trainee-18",
+    "email": "lucas.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Lucas Martinez",
+    "phone": "1234568017",
+    "department": "Engineering",
+    "employeeId": "EMP018"
+  },
+  {
+    "id": "trainee-19",
+    "email": "amelia.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Amelia Robinson",
+    "phone": "1234568018",
+    "department": "Engineering",
+    "employeeId": "EMP019"
+  },
+  {
+    "id": "trainee-20",
+    "email": "ethan.trainee@example.com",
+    "password": "password",
+    "role": "trainee",
+    "name": "Ethan Clark",
+    "phone": "1234568019",
+    "department": "Engineering",
+    "employeeId": "EMP020"
+  }
+]
+

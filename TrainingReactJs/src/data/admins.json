@@ -1,0 +1,183 @@
+[
+  {
+    "id": "admin-1",
+    "email": "admin@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Admin User",
+    "phone": "1234567000",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-2",
+    "email": "admin2@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Super Admin",
+    "phone": "1234567001",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-3",
+    "email": "admin3@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "System Admin",
+    "phone": "1234567002",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-4",
+    "email": "admin4@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Platform Admin",
+    "phone": "1234567003",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-5",
+    "email": "admin5@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Operations Admin",
+    "phone": "1234567004",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-6",
+    "email": "admin6@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Support Admin",
+    "phone": "1234567005",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-7",
+    "email": "admin7@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Technical Admin",
+    "phone": "1234567006",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-8",
+    "email": "admin8@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Content Admin",
+    "phone": "1234567007",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-9",
+    "email": "admin9@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Security Admin",
+    "phone": "1234567008",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-10",
+    "email": "admin10@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Network Admin",
+    "phone": "1234567009",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-11",
+    "email": "admin11@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Database Admin",
+    "phone": "1234567010",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-12",
+    "email": "admin12@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Application Admin",
+    "phone": "1234567011",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-13",
+    "email": "admin13@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Infrastructure Admin",
+    "phone": "1234567012",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-14",
+    "email": "admin14@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Cloud Admin",
+    "phone": "1234567013",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-15",
+    "email": "admin15@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "DevOps Admin",
+    "phone": "1234567014",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-16",
+    "email": "admin16@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Quality Admin",
+    "phone": "1234567015",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-17",
+    "email": "admin17@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Compliance Admin",
+    "phone": "1234567016",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-18",
+    "email": "admin18@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Audit Admin",
+    "phone": "1234567017",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-19",
+    "email": "admin19@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Training Admin",
+    "phone": "1234567018",
+    "department": "Administration"
+  },
+  {
+    "id": "admin-20",
+    "email": "admin20@example.com",
+    "password": "password",
+    "role": "admin",
+    "name": "Master Admin",
+    "phone": "1234567019",
+    "department": "Administration"
+  }
+]
+

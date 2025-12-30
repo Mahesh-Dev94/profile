@@ -1,0 +1,171 @@
+React.js Live Lab Corporate Training Platform – Cursor Prompt
+
+Create a scalable, production-ready React.js application for a Live Lab Corporate Training Management Platform that supports Trainer, Trainee, Client, and Admin roles with role-based workflows, scheduling logic, and notifications.
+
+--------------------------------------------------
+OBJECTIVE
+--------------------------------------------------
+Build a system to automate corporate live lab trainings where:
+- Trainers deliver live training sessions
+- Trainees attend and complete trainings
+- Clients (companies) request and schedule trainings for up to 50 trainees per session
+- Admin oversees scheduling, conflicts, priorities, and notifications
+
+--------------------------------------------------
+USER ROLES & FUNCTIONALITY
+--------------------------------------------------
+
+1. TRAINER
+Purpose: Deliver training sessions
+
+Features:
+- Login and role-based dashboard
+- Create and manage availability:
+  - Date
+  - Time slots
+  - Maximum trainees per slot
+- Accept or reject training requests
+- Conduct training sessions
+- Mark training as:
+  - Completed
+  - Cancelled
+- View training history:
+  - Completed
+  - Cancelled
+  - Upcoming
+- Receive notifications for:
+  - New training requests
+  - Schedule changes
+  - Priority overrides
+
+--------------------------------------------------
+
+2. TRAINEE
+Purpose: Attend and complete training
+
+Features:
+- Login and role-based dashboard
+- View assigned training sessions
+- Attend live training sessions
+- Training status tracking:
+  - Upcoming
+  - Attended
+  - Completed
+  - Missed
+- View training history
+- Receive notifications for:
+  - Training confirmation
+  - Schedule updates
+  - Cancellations
+
+--------------------------------------------------
+
+3. CLIENT (Corporate Customer)
+Purpose: Request and schedule training for employees
+
+Features:
+- Login and role-based dashboard
+- Request training sessions:
+  - Select date and time
+  - Select trainer (optional)
+  - Assign up to 50 trainees per session
+- View training requests:
+  - Pending
+  - Approved
+  - Rejected
+  - Rescheduled
+- Client attributes:
+  - Client value score
+  - Client rating
+- View training history and invoices
+- Pricing model:
+  - ₹1000 lump-sum per training session
+- Receive notifications for:
+  - Approval or rejection
+  - Rescheduling due to priority conflicts
+
+--------------------------------------------------
+
+4. ADMIN
+Purpose: Platform control and conflict resolution
+
+Features:
+- Login and admin dashboard
+- Manage users:
+  - Trainers
+  - Trainees
+  - Clients
+- View all training schedules
+- Approve, reject, or override schedules
+- Monitor scheduling conflicts
+- Configure client priority scores
+- View system-wide notifications and logs
+
+--------------------------------------------------
+BUSINESS RULES & SCHEDULING LOGIC
+--------------------------------------------------
+
+Rule 1: Priority-Based Scheduling
+- If multiple clients request the same trainer and time slot:
+  - Use client priority score to resolve conflicts
+  - Highest-value client gets the slot
+
+Rule 2: High-Value Client Override
+- If Client B already scheduled a training session for multiple trainees
+- And Client A (higher priority) requests the same slot:
+  - Allocate the slot to Client A
+  - Notify Client B with reason
+  - Offer alternative time slots to Client B
+  - Notify Trainer and Admin
+
+Rule 3: Trainee Assignment Handling
+- If training is rescheduled or cancelled:
+  - Update all affected trainees
+  - Maintain historical logs for audit and reporting
+
+Rule 4: Notification System
+- Notifications for:
+  - Trainer
+  - Trainee
+  - Client
+  - Admin
+- Notification types:
+  - Informational
+  - Warning
+  - Action required
+
+--------------------------------------------------
+TECHNICAL REQUIREMENTS
+--------------------------------------------------
+
+- React.js with functional components and hooks
+- React Router for navigation and protected routes
+- Role-based authorization
+- State management using Redux Toolkit or Context API
+- Modular folder structure:
+  - components/
+  - pages/
+  - services/
+  - utils/
+  - hooks/
+- Mock API layer (backend-ready)
+- Scheduling and priority logic in reusable utility functions
+- UI framework: Material UI or Ant Design
+
+--------------------------------------------------
+DELIVERABLES
+--------------------------------------------------
+
+- Clean and scalable project folder structure
+- Role-based dashboards:
+  - Trainer Dashboard
+  - Trainee Dashboard
+  - Client Dashboard
+  - Admin Dashboard
+- Scheduling and conflict-resolution logic
+- Notification system implementation
+- Reusable UI components (tables, modals, alerts)
+- Well-commented, production-quality React code
+
+
+
