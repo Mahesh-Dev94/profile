@@ -4,11 +4,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Box, Typography, Paper } from '@mui/material'
 import Modal from '../../components/common/Modal'
 import TrainingRequestForm from '../../components/client/TrainingRequestForm'
-import { userApi, requestApi } from '../../services/mockApi'
+import { userApi, requestApi, notificationApi } from '../../services/mockApi'
 import { addNotification } from '../../store/slices/notificationSlice'
-import { resolveConflictByPriority, findConflicts } from '../../utils/scheduling'
 import { trainingApi } from '../../services/mockApi'
 import { setClients } from '../../store/slices/userSlice'
+import { setRequests } from '../../store/slices/trainingSlice'
 
 const ClientRequestTraining = () => {
   const navigate = useNavigate()
@@ -36,54 +36,36 @@ const ClientRequestTraining = () => {
 
   const handleRequestSubmit = async (formData) => {
     try {
-      const allTrainings = await trainingApi.getTrainings()
-      const requestedSlot = {
-        date: formData.date,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-      }
-
-      const conflicts = findConflicts(
-        requestedSlot,
-        allTrainings.filter((t) => t.status !== 'cancelled'),
-        formData.trainerId
-      )
-
-      if (conflicts.length > 0) {
-        const resolution = resolveConflictByPriority(
-          { ...formData, clientId: user.id },
-          conflicts,
-          clients
-        )
-
-        if (resolution.winner === 'existing') {
-          dispatch(addNotification({
-            userId: 'admin',
-            type: 'warning',
-            message: `Training request conflicts with existing booking. Priority resolution needed.`,
-          }))
-        } else if (resolution.winner === 'new') {
-          resolution.affectedTrainings.forEach((training) => {
-            dispatch(addNotification({
-              userId: training.clientId,
-              type: 'warning',
-              message: `Your training on ${training.date} has been rescheduled due to higher priority client.`,
-            }))
-          })
-        }
-      }
-
-      await requestApi.createRequest({
+      // Create request with status 'pending' - goes to Admin first
+      const newRequest = await requestApi.createRequest({
         ...formData,
         clientId: user.id,
         clientName: user.name,
+        status: 'pending', // Admin will review first
+        workflowStatus: 'admin_review', // New field to track workflow
       })
 
+      // Notify all admins about the new request
+      const admins = await userApi.getUsers('admin')
+      for (const admin of admins) {
+        await notificationApi.createNotification({
+          userId: admin.id,
+          type: 'info',
+          message: `New training request from ${user.name}: ${formData.title} on ${formData.date}`,
+          requestId: newRequest.id,
+        })
+      }
+
+      // Notify client
       dispatch(addNotification({
         userId: user.id,
         type: 'success',
-        message: 'Training request submitted successfully',
+        message: 'Training request submitted successfully. Awaiting admin approval.',
       }))
+
+      // Reload requests to show the new one
+      const updatedRequests = await requestApi.getRequests({ clientId: user.id })
+      dispatch(setRequests(updatedRequests))
 
       navigate('/client/requests/pending')
     } catch (error) {
@@ -109,4 +91,3 @@ const ClientRequestTraining = () => {
 }
 
 export default ClientRequestTraining
-

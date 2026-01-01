@@ -18,42 +18,91 @@ import { login } from '../store/slices/authSlice'
 import { authApi } from '../services/mockApi'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [role, setRole] = useState('trainer')
+  const [email, setEmail] = useState('client1@gmail.com')
+  const [password, setPassword] = useState('password')
+  const [role, setRole] = useState('client')
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const handleRoleChange = (event) => {
+    const selectedRole = event.target.value
+    setRole(selectedRole)
+    
+    // Auto-fill sample email and password based on role
+    const roleEmails = {
+      trainer: 'trainer1@gmail.com',
+      client: 'client1@gmail.com',
+      admin: 'admin1@gmail.com',
+    }
+    setEmail(roleEmails[selectedRole] || '')
+    setPassword('password') // Auto-fill password
+    setEmailError('')
+    setPasswordError('')
+    setError('')
+  }
+
+  const validateEmail = (email) => {
+    if (!email || email.trim() === '') {
+      return 'Email is required'
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return 'Please enter a valid email address'
+    }
+    return ''
+  }
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value
+    setEmail(value)
+    setEmailError('')
+    setError('')
+  }
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value)
+    setPasswordError('')
+    setError('')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setEmailError('')
+    setPasswordError('')
+
+    // Validate email
+    const emailValidationError = validateEmail(email)
+    if (emailValidationError) {
+      setEmailError(emailValidationError)
+      return
+    }
+
+    // Validate password
+    if (!password || password.trim() === '') {
+      setPasswordError('Password is required')
+      return
+    }
+
     setLoading(true)
 
     try {
-      // For demo purposes, we'll use role-based email mapping
-      const roleEmails = {
-        trainer: 'trainer@example.com',
-        trainee: 'trainee@example.com',
-        client: 'client@example.com',
-        admin: 'admin@example.com',
-      }
-
-      const loginEmail = roleEmails[role] || email
-      const result = await authApi.login(loginEmail, password)
+      const result = await authApi.login(email.trim(), password)
       dispatch(login(result))
 
       // Navigate based on role
       const roleRoutes = {
         trainer: '/trainer',
-        trainee: '/trainee',
         client: '/client',
         admin: '/admin',
       }
       navigate(roleRoutes[result.user.role] || '/')
     } catch (err) {
-      setError(err.message || 'Login failed')
+      setError(err.message || 'Invalid email or password. Please check your credentials.')
     } finally {
       setLoading(false)
     }
@@ -71,7 +120,7 @@ const Login = () => {
       >
         <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h4" align="center" gutterBottom>
-            Live Lab Training Platform
+            Life Labs Training Platform
           </Typography>
           <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 3 }}>
             Sign in to your account
@@ -85,16 +134,15 @@ const Login = () => {
 
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>Role</InputLabel>
+              <InputLabel>Select User Role</InputLabel>
               <Select
                 value={role}
-                label="Role"
-                onChange={(e) => setRole(e.target.value)}
+                label="Select User Role"
+                onChange={handleRoleChange}
               >
-                <MenuItem value="trainer">Trainer</MenuItem>
-                <MenuItem value="trainee">Trainee</MenuItem>
                 <MenuItem value="client">Client</MenuItem>
                 <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="trainer">Trainer</MenuItem>
               </Select>
             </FormControl>
 
@@ -108,9 +156,9 @@ const Login = () => {
               autoComplete="email"
               autoFocus
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={true}
-              helperText="Email auto-filled based on role (password: 'password')"
+              onChange={handleEmailChange}
+              error={!!emailError}
+              helperText={emailError || "Email auto-filled based on role. You can change it to use trainer2@gmail.com, client2@gmail.com, admin2@gmail.com, etc."}
             />
             <TextField
               margin="normal"
@@ -122,7 +170,9 @@ const Login = () => {
               id="password"
               autoComplete="current-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
+              error={!!passwordError}
+              helperText={passwordError || "Password auto-filled. You can change it if needed."}
             />
             <Button
               type="submit"
@@ -134,7 +184,7 @@ const Login = () => {
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
             <Typography variant="body2" align="center" color="text.secondary">
-              Demo: Select role and use password "password"
+              Demo accounts: trainer1@gmail.com, trainer2@gmail.com, client1@gmail.com, client2@gmail.com, admin1@gmail.com, admin2@gmail.com (password: "password")
             </Typography>
           </Box>
         </Paper>
@@ -144,4 +194,3 @@ const Login = () => {
 }
 
 export default Login
-

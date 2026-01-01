@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Login from './pages/Login'
 import TrainerDashboard from './pages/TrainerDashboard'
-import TraineeDashboard from './pages/TraineeDashboard'
 import ClientDashboard from './pages/ClientDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -27,8 +26,6 @@ function App() {
           element={
             user?.role === 'trainer' ? (
               <Navigate to="/trainer" />
-            ) : user?.role === 'trainee' ? (
-              <Navigate to="/trainee" />
             ) : user?.role === 'client' ? (
               <Navigate to="/client" />
             ) : user?.role === 'admin' ? (
@@ -39,7 +36,6 @@ function App() {
           }
         />
         <Route path="trainer/*" element={<TrainerDashboard />} />
-        <Route path="trainee/*" element={<TraineeDashboard />} />
         <Route path="client/*" element={<ClientDashboard />} />
         <Route path="admin/*" element={<AdminDashboard />} />
       </Route>

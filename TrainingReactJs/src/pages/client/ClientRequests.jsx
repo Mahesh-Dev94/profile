@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   Box,
   Typography,
@@ -10,6 +10,12 @@ import {
   Chip,
   Paper,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  MenuItem,
 } from '@mui/material'
 import {
   Add as AddIcon,
@@ -19,30 +25,61 @@ import {
   Cancel,
   Schedule,
   ArrowBack,
+  Edit,
 } from '@mui/icons-material'
 import DataTable from '../../components/common/DataTable'
 import TrainingDetails from '../../components/client/TrainingDetails'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { requestApi, notificationApi } from '../../services/mockApi'
+import { setRequests } from '../../store/slices/trainingSlice'
+import useLoader from '../../hooks/useLoader'
+import Loader from '../../components/common/Loader'
 
 const ClientRequests = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth)
   const { requests } = useSelector((state) => state.training)
+  const { loading, withLoader } = useLoader()
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false)
+  const [rescheduleDate, setRescheduleDate] = useState('')
+  const [rescheduleStartTime, setRescheduleStartTime] = useState('09:00')
+  const [rescheduleEndTime, setRescheduleEndTime] = useState('17:00')
+  const [costApprovalDialogOpen, setCostApprovalDialogOpen] = useState(false)
+  const [selectedCostRequest, setSelectedCostRequest] = useState(null)
 
-  const pendingRequests = requests.filter((r) => r.status === 'pending')
+  useEffect(() => {
+    loadRequests()
+  }, [user])
+
+  const loadRequests = async () => {
+    await withLoader(async () => {
+      try {
+        const requestsData = await requestApi.getRequests({ clientId: user.id })
+        dispatch(setRequests(requestsData))
+      } catch (error) {
+        console.error('Failed to load requests:', error)
+      }
+    }, 'Loading requests...')
+  }
+
+  const pendingRequests = requests.filter((r) => r.status === 'pending' || r.workflowStatus === 'admin_review')
   const approvedRequests = requests.filter((r) => r.status === 'approved')
   const rejectedRequests = requests.filter((r) => r.status === 'rejected')
   const rescheduledRequests = requests.filter((r) => r.status === 'rescheduled')
+  // Requests waiting for cost approval
+  const costApprovalRequests = requests.filter((r) => r.workflowStatus === 'cost_negotiation_client' && r.costStatus === 'pending_client_approval')
 
-  const getStatusConfig = (status) => {
+  const getStatusConfig = (status, customLabel) => {
     const configs = {
       pending: {
         color: '#2196f3',
         bgColor: 'rgba(33, 150, 243, 0.1)',
         icon: <Pending />,
-        label: 'Pending',
+        label: customLabel || 'Pending',
         gradient: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)',
       },
       approved: {
@@ -110,15 +147,133 @@ const ClientRequests = () => {
       align: 'center',
       minWidth: 100,
     },
+    {
+      id: 'emailId',
+      label: 'Email IDs',
+      render: (val, row) => {
+        if (!val) return 'N/A'
+        const emails = val.split(',').map(e => e.trim()).filter(Boolean)
+        return (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            {emails.slice(0, 2).map((email, idx) => (
+              <Chip key={idx} label={email} size="small" sx={{ fontSize: '0.7rem' }} />
+            ))}
+            {emails.length > 2 && (
+              <Chip label={`+${emails.length - 2} more`} size="small" sx={{ fontSize: '0.7rem' }} />
+            )}
+          </Box>
+        )
+      },
+      minWidth: 200,
+    },
   ]
+
+  const handleReschedule = (request) => {
+    setSelectedRequest(request)
+    setRescheduleDate(request.date)
+    setRescheduleStartTime(request.startTime)
+    setRescheduleEndTime(request.endTime)
+    setRescheduleModalOpen(true)
+  }
+
+  const handleRescheduleConfirm = async () => {
+    if (!selectedRequest || !rescheduleDate) {
+      alert('Please select a new date')
+      return
+    }
+
+    await withLoader(async () => {
+      try {
+        await requestApi.updateRequest(selectedRequest.id, {
+          date: rescheduleDate,
+          startTime: rescheduleStartTime,
+          endTime: rescheduleEndTime,
+          status: 'rescheduled',
+          rescheduleRequested: true,
+        })
+
+        await notificationApi.createNotification({
+          userId: selectedRequest.clientId,
+          type: 'info',
+          message: `Your training request "${selectedRequest.title}" has been rescheduled to ${rescheduleDate}`,
+        })
+
+        setRescheduleModalOpen(false)
+        setSelectedRequest(null)
+        loadRequests()
+      } catch (error) {
+        console.error('Failed to reschedule request:', error)
+        alert('Failed to reschedule request')
+      }
+    }, 'Rescheduling request...')
+  }
+
+  const handleCostApproval = (request) => {
+    setSelectedCostRequest(request)
+    setCostApprovalDialogOpen(true)
+  }
+
+  const handleCostApprovalConfirm = async (approved) => {
+    if (!selectedCostRequest) return
+
+    await withLoader(async () => {
+      try {
+        if (approved) {
+          // Client approved the cost, forward to trainer
+          await requestApi.updateRequest(selectedCostRequest.id, {
+            costStatus: 'approved_by_client',
+            workflowStatus: 'trainer_review',
+            proposedCost: selectedCostRequest.adminProposedCost, // Update to admin's proposed cost
+          })
+
+          await notificationApi.createNotification({
+            userId: 'admin-1',
+            type: 'success',
+            message: `Client approved cost ₹${selectedCostRequest.adminProposedCost} for training request "${selectedCostRequest.title}". Forwarding to trainer.`,
+          })
+
+          await notificationApi.createNotification({
+            userId: user.id,
+            type: 'success',
+            message: `You approved the cost ₹${selectedCostRequest.adminProposedCost} for training request "${selectedCostRequest.title}".`,
+          })
+        } else {
+          // Client rejected the cost
+          await requestApi.updateRequest(selectedCostRequest.id, {
+            costStatus: 'rejected_by_client',
+            workflowStatus: 'admin_review', // Send back to admin
+          })
+
+          await notificationApi.createNotification({
+            userId: 'admin-1',
+            type: 'warning',
+            message: `Client rejected cost ₹${selectedCostRequest.adminProposedCost} for training request "${selectedCostRequest.title}". Please review.`,
+          })
+
+          await notificationApi.createNotification({
+            userId: user.id,
+            type: 'info',
+            message: `You rejected the proposed cost for training request "${selectedCostRequest.title}". Request sent back to admin.`,
+          })
+        }
+
+        setCostApprovalDialogOpen(false)
+        setSelectedCostRequest(null)
+        loadRequests()
+      } catch (error) {
+        console.error('Failed to process cost approval:', error)
+        alert('Failed to process cost approval')
+      }
+    }, approved ? 'Approving cost...' : 'Rejecting cost...')
+  }
 
   const handleViewDetails = (request) => {
     setSelectedRequest(request)
     setDetailsOpen(true)
   }
 
-  const StatusOverview = ({ status, count, requests, onClick }) => {
-    const config = getStatusConfig(status)
+  const StatusOverview = ({ status, count, requests, onClick, label }) => {
+    const config = getStatusConfig(status, label)
     const isActive = location.pathname.includes(`/${status}`)
 
     return (
@@ -179,8 +334,8 @@ const ClientRequests = () => {
     )
   }
 
-  const RequestList = ({ requests, status }) => {
-    const config = getStatusConfig(status)
+  const RequestList = ({ requests, status, label }) => {
+    const config = getStatusConfig(status, label)
 
     if (requests.length === 0) {
       return (
@@ -248,25 +403,46 @@ const ClientRequests = () => {
           </Box>
         </Box>
         <Box sx={{ p: 2 }}>
-          <DataTable
-            columns={requestColumns}
-            data={requests}
-            actions={[
-              {
-                icon: <Visibility />,
-                tooltip: 'View Details',
-                onClick: handleViewDetails,
-              },
-            ]}
-          />
+            <DataTable
+              columns={requestColumns}
+              data={requests}
+              actions={[
+                {
+                  icon: <Visibility />,
+                  tooltip: 'View Details',
+                  onClick: handleViewDetails,
+                },
+                ...(status === 'pending' || status === 'admin_approved' ? [{
+                  icon: <Edit />,
+                  tooltip: 'Reschedule Request',
+                  onClick: handleReschedule,
+                  color: 'primary',
+                }] : []),
+                ...(requests.some(r => r.workflowStatus === 'cost_negotiation_client' && r.costStatus === 'pending_client_approval') ? [{
+                  icon: <CheckCircle />,
+                  tooltip: 'Review Cost Proposal',
+                  onClick: (row) => {
+                    if (row.workflowStatus === 'cost_negotiation_client' && row.costStatus === 'pending_client_approval') {
+                      handleCostApproval(row)
+                    }
+                  },
+                  color: 'warning',
+                }] : []),
+              ]}
+            />
         </Box>
       </Paper>
     )
   }
 
+  if (loading) {
+    return <Loader fullScreen message="Loading requests..." />
+  }
+
   return (
-    <Routes>
-      <Route
+    <>
+      <Routes>
+        <Route
         index
         element={
           <Box>
@@ -304,6 +480,7 @@ const ClientRequests = () => {
                   count={pendingRequests.length}
                   requests={pendingRequests}
                   onClick={() => navigate('/client/requests/pending')}
+                  label="Active Request"
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
@@ -332,7 +509,30 @@ const ClientRequests = () => {
               </Grid>
             </Grid>
 
-            <RequestList requests={pendingRequests} status="pending" />
+            {/* Cost Approval Requests Section */}
+            {costApprovalRequests.length > 0 && (
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: 'warning.main' }}>
+                  Cost Approval Required ({costApprovalRequests.length})
+                </Typography>
+                <Paper sx={{ backgroundColor: '#1E1E1E', p: 2 }}>
+                  <DataTable
+                    columns={requestColumns}
+                    data={costApprovalRequests}
+                    actions={[
+                      {
+                        icon: <CheckCircle />,
+                        tooltip: 'Approve Cost',
+                        onClick: handleCostApproval,
+                        color: 'success',
+                      },
+                    ]}
+                  />
+                </Paper>
+              </Box>
+            )}
+
+            <RequestList requests={pendingRequests} status="pending" label="Active Request" />
 
             {selectedRequest && (
               <TrainingDetails
@@ -346,9 +546,9 @@ const ClientRequests = () => {
             )}
           </Box>
         }
-      />
-      <Route
-        path="pending"
+        />
+        <Route
+          path="pending"
         element={
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
@@ -356,10 +556,10 @@ const ClientRequests = () => {
                 <ArrowBack />
               </IconButton>
               <Typography variant="h4" sx={{ fontWeight: 600, flexGrow: 1 }}>
-                Pending Requests
+                Active Requests
               </Typography>
             </Box>
-            <RequestList requests={pendingRequests} status="pending" />
+            <RequestList requests={pendingRequests} status="pending" label="Active Request" />
             {selectedRequest && (
               <TrainingDetails
                 open={detailsOpen}
@@ -372,9 +572,9 @@ const ClientRequests = () => {
             )}
           </Box>
         }
-      />
-      <Route
-        path="approved"
+        />
+        <Route
+          path="approved"
         element={
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
@@ -398,9 +598,9 @@ const ClientRequests = () => {
             )}
           </Box>
         }
-      />
-      <Route
-        path="rejected"
+        />
+        <Route
+          path="rejected"
         element={
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
@@ -424,9 +624,9 @@ const ClientRequests = () => {
             )}
           </Box>
         }
-      />
-      <Route
-        path="rescheduled"
+        />
+        <Route
+          path="rescheduled"
         element={
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, gap: 2 }}>
@@ -450,8 +650,103 @@ const ClientRequests = () => {
             )}
           </Box>
         }
-      />
-    </Routes>
+        />
+      </Routes>
+
+    {/* Reschedule Modal */}
+    <Dialog open={rescheduleModalOpen} onClose={() => setRescheduleModalOpen(false)} maxWidth="sm" fullWidth>
+      <DialogTitle>Reschedule Training Request</DialogTitle>
+      <DialogContent>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Request: {selectedRequest?.title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Current Date: {selectedRequest?.date} | Time: {selectedRequest?.startTime} - {selectedRequest?.endTime}
+          </Typography>
+        </Box>
+        <TextField
+          fullWidth
+          type="date"
+          label="New Date"
+          value={rescheduleDate}
+          onChange={(e) => setRescheduleDate(e.target.value)}
+          InputLabelProps={{ shrink: true }}
+          required
+          sx={{ mt: 2 }}
+        />
+        <TextField
+          select
+          fullWidth
+          label="New Start Time"
+          value={rescheduleStartTime}
+          onChange={(e) => setRescheduleStartTime(e.target.value)}
+          sx={{ mt: 2 }}
+        >
+          {Array.from({ length: 48 }, (_, i) => {
+            const hour = Math.floor(i / 2)
+            const minute = (i % 2) * 30
+            const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+            return <MenuItem key={time} value={time}>{time}</MenuItem>
+          })}
+        </TextField>
+        <TextField
+          select
+          fullWidth
+          label="New End Time"
+          value={rescheduleEndTime}
+          onChange={(e) => setRescheduleEndTime(e.target.value)}
+          sx={{ mt: 2 }}
+        >
+          {Array.from({ length: 48 }, (_, i) => {
+            const hour = Math.floor(i / 2)
+            const minute = (i % 2) * 30
+            const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+            return <MenuItem key={time} value={time}>{time}</MenuItem>
+          })}
+        </TextField>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setRescheduleModalOpen(false)}>Cancel</Button>
+        <Button onClick={handleRescheduleConfirm} variant="contained" disabled={!rescheduleDate}>
+          Reschedule
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+    {/* Cost Approval Dialog */}
+    <Dialog open={costApprovalDialogOpen} onClose={() => setCostApprovalDialogOpen(false)} maxWidth="sm" fullWidth>
+      <DialogTitle>Review Cost Proposal</DialogTitle>
+      <DialogContent>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body1" gutterBottom>
+            Training: {selectedCostRequest?.title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Number of Trainees: {selectedCostRequest?.numberOfTrainees || 0}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Your Proposed Cost: ₹{selectedCostRequest?.proposedCost || 1000}
+          </Typography>
+          <Typography variant="body1" color="primary" sx={{ mt: 2, fontWeight: 600 }}>
+            Admin Proposed Cost: ₹{selectedCostRequest?.adminProposedCost || 1000}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Admin has proposed a higher cost based on the number of trainees. Please review and approve or reject.
+          </Typography>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setCostApprovalDialogOpen(false)}>Cancel</Button>
+        <Button onClick={() => handleCostApprovalConfirm(false)} variant="outlined" color="error">
+          Reject Cost
+        </Button>
+        <Button onClick={() => handleCostApprovalConfirm(true)} variant="contained" color="success">
+          Approve Cost
+        </Button>
+      </DialogActions>
+    </Dialog>
+    </>
   )
 }
 

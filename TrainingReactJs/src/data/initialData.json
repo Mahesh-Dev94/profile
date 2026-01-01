@@ -1,0 +1,265 @@
+{
+  "clients": [
+    {
+      "id": "client-1",
+      "email": "client1@gmail.com",
+      "password": "password",
+      "role": "client",
+      "name": "Acme Corp",
+      "phone": "1234569000",
+      "priorityScore": 85,
+      "rating": 4.5,
+      "contactPerson": "John Manager",
+      "industry": "Technology"
+    },
+    {
+      "id": "client-2",
+      "email": "client2@gmail.com",
+      "password": "password",
+      "role": "client",
+      "name": "Tech Solutions Inc",
+      "phone": "1234569001",
+      "priorityScore": 90,
+      "rating": 4.8,
+      "contactPerson": "Sarah Director",
+      "industry": "Technology"
+    },
+    {
+      "id": "client-3",
+      "email": "client@example.com",
+      "password": "password",
+      "role": "client",
+      "name": "Innovate Labs",
+      "phone": "1234569002",
+      "priorityScore": 75,
+      "rating": 4.3,
+      "contactPerson": "Mike CEO",
+      "industry": "Technology"
+    }
+  ],
+  "trainers": [
+    {
+      "id": "trainer-1",
+      "email": "trainer1@gmail.com",
+      "password": "password",
+      "role": "trainer",
+      "name": "John Trainer",
+      "phone": "1234567890",
+      "specialization": "React.js",
+      "experience": "5 years",
+      "rating": 4.8
+    },
+    {
+      "id": "trainer-2",
+      "email": "trainer2@gmail.com",
+      "password": "password",
+      "role": "trainer",
+      "name": "Sarah Johnson",
+      "phone": "1234567891",
+      "specialization": "Node.js",
+      "experience": "7 years",
+      "rating": 4.9
+    },
+    {
+      "id": "trainer-3",
+      "email": "trainer@example.com",
+      "password": "password",
+      "role": "trainer",
+      "name": "Mike Chen",
+      "phone": "1234567892",
+      "specialization": "Full Stack",
+      "experience": "6 years",
+      "rating": 4.7
+    }
+  ],
+  "admins": [
+    {
+      "id": "admin-1",
+      "email": "admin1@gmail.com",
+      "password": "password",
+      "role": "admin",
+      "name": "Admin User",
+      "phone": "1234567000",
+      "department": "Administration"
+    },
+    {
+      "id": "admin-2",
+      "email": "admin2@gmail.com",
+      "password": "password",
+      "role": "admin",
+      "name": "Super Admin",
+      "phone": "1234567001",
+      "department": "Administration"
+    },
+    {
+      "id": "admin-3",
+      "email": "admin@example.com",
+      "password": "password",
+      "role": "admin",
+      "name": "System Admin",
+      "phone": "1234567002",
+      "department": "Administration"
+    }
+  ],
+  "availability": [
+    {
+      "id": "avail-1",
+      "trainerId": "trainer-1",
+      "date": "2024-01-15",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "maxTrainees": 50,
+      "status": "open",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "avail-2",
+      "trainerId": "trainer-2",
+      "date": "2024-01-16",
+      "startTime": "10:00",
+      "endTime": "18:00",
+      "maxTrainees": 50,
+      "status": "open",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "avail-3",
+      "trainerId": "trainer-3",
+      "date": "2024-01-17",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "maxTrainees": 50,
+      "status": "open",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "trainings": [
+    {
+      "id": "training-1",
+      "title": "React.js Fundamentals",
+      "date": "2024-01-20",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "trainerId": "trainer-1",
+      "trainerName": "John Trainer",
+      "clientId": "client-1",
+      "clientName": "Acme Corp",
+      "status": "completed",
+      "numberOfTrainees": 25,
+      "description": "Complete React.js training course",
+      "cost": 1000,
+      "createdAt": "2024-01-10T00:00:00.000Z"
+    },
+    {
+      "id": "training-2",
+      "title": "Node.js Advanced",
+      "date": "2024-01-25",
+      "startTime": "10:00",
+      "endTime": "18:00",
+      "trainerId": "trainer-2",
+      "trainerName": "Sarah Johnson",
+      "clientId": "client-2",
+      "clientName": "Tech Solutions Inc",
+      "status": "completed",
+      "numberOfTrainees": 30,
+      "description": "Advanced Node.js concepts",
+      "cost": 1000,
+      "createdAt": "2024-01-12T00:00:00.000Z"
+    },
+    {
+      "id": "training-3",
+      "title": "Full Stack Development",
+      "date": "2024-02-01",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "trainerId": "trainer-3",
+      "trainerName": "Mike Chen",
+      "clientId": "client-1",
+      "clientName": "Acme Corp",
+      "status": "approved",
+      "numberOfTrainees": 20,
+      "description": "Full stack development training",
+      "cost": 1000,
+      "createdAt": "2024-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "training-4",
+      "title": "React.js Advanced Patterns",
+      "date": "2024-02-05",
+      "startTime": "10:00",
+      "endTime": "18:00",
+      "trainerId": "trainer-1",
+      "trainerName": "John Trainer",
+      "clientId": "client-2",
+      "clientName": "Tech Solutions Inc",
+      "status": "approved",
+      "numberOfTrainees": 35,
+      "description": "Advanced React patterns and best practices",
+      "cost": 1000,
+      "createdAt": "2024-01-18T00:00:00.000Z"
+    },
+    {
+      "id": "training-5",
+      "title": "JavaScript Basics",
+      "date": "2024-02-10",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "trainerId": "trainer-1",
+      "trainerName": "John Trainer",
+      "clientId": "client-1",
+      "clientName": "Acme Corp",
+      "status": "cancelled",
+      "numberOfTrainees": 15,
+      "description": "JavaScript basics training",
+      "cost": 1000,
+      "cancelledAt": "2024-01-22T00:00:00.000Z",
+      "createdAt": "2024-01-20T00:00:00.000Z"
+    },
+    {
+      "id": "training-6",
+      "title": "Python Fundamentals",
+      "date": "2024-02-15",
+      "startTime": "10:00",
+      "endTime": "18:00",
+      "trainerId": "trainer-2",
+      "trainerName": "Sarah Johnson",
+      "clientId": "client-2",
+      "clientName": "Tech Solutions Inc",
+      "status": "cancelled",
+      "numberOfTrainees": 20,
+      "description": "Python fundamentals training",
+      "cost": 1000,
+      "cancelledAt": "2024-01-25T00:00:00.000Z",
+      "createdAt": "2024-01-23T00:00:00.000Z"
+    }
+  ],
+  "requests": [
+    {
+      "id": "request-1",
+      "title": "JavaScript Fundamentals",
+      "date": "2024-02-10",
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "trainerId": "trainer-1",
+      "clientId": "client-1",
+      "clientName": "Acme Corp",
+      "status": "pending",
+      "numberOfTrainees": 25,
+      "emailId": "trainee1@example.com, trainee2@example.com",
+      "description": "JavaScript basics training",
+      "proposedCost": 1000,
+      "createdAt": "2024-01-20T00:00:00.000Z"
+    }
+  ],
+  "sampleEmails": [
+    "john.doe@example.com",
+    "jane.smith@example.com",
+    "mike.johnson@example.com",
+    "sarah.williams@example.com",
+    "david.brown@example.com",
+    "emily.davis@example.com",
+    "robert.miller@example.com",
+    "lisa.wilson@example.com"
+  ],
+  "traineeCounts": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+}

@@ -100,32 +100,6 @@ const Sidebar = ({ open, onClose }) => {
       ]
     }
 
-    if (role === 'trainee') {
-      return [
-        {
-          title: 'Dashboard',
-          icon: <Dashboard />,
-          path: '/trainee',
-          exact: true,
-        },
-        {
-          title: 'My Trainings',
-          icon: <School />,
-          children: [
-            { title: 'Upcoming', path: '/trainee/trainings/upcoming' },
-            { title: 'Attended', path: '/trainee/trainings/attended' },
-            { title: 'Completed', path: '/trainee/trainings/completed' },
-            { title: 'Missed', path: '/trainee/trainings/missed' },
-          ],
-        },
-        {
-          title: 'Training History',
-          icon: <History />,
-          path: '/trainee/history',
-        },
-      ]
-    }
-
     if (role === 'client') {
       return [
         {
@@ -143,7 +117,7 @@ const Sidebar = ({ open, onClose }) => {
           title: 'Training Requests',
           icon: <Business />,
           children: [
-            { title: 'Pending', path: '/client/requests/pending' },
+            { title: 'Active Request', path: '/client/requests/pending' },
             { title: 'Approved', path: '/client/requests/approved' },
             { title: 'Rejected', path: '/client/requests/rejected' },
             { title: 'Rescheduled', path: '/client/requests/rescheduled' },
@@ -183,9 +157,9 @@ const Sidebar = ({ open, onClose }) => {
           title: 'User Management',
           icon: <Group />,
           children: [
-            { title: 'Trainers', path: '/admin/users/trainers' },
-            { title: 'Trainees', path: '/admin/users/trainees' },
-            { title: 'Clients', path: '/admin/users/clients' },
+            { title: 'Trainers', path: '/admin/trainers' },
+            { title: 'Clients', path: '/admin/clients' },
+            { title: 'Create User', path: '/admin/users/create' },
           ],
         },
         {
@@ -316,7 +290,7 @@ const Sidebar = ({ open, onClose }) => {
             WebkitTextFillColor: 'transparent',
           }}
         >
-          Training Platform
+          Life Labs Training Platform
         </Typography>
         <Typography variant="caption" color="text.secondary">
           {user?.name || 'User'}
