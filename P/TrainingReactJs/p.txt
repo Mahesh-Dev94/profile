@@ -1,0 +1,381 @@
+You are a senior React JS engineer.
+
+spinner loader with modal dialog message  
+
+
+Project Name:
+Update Life Lab Training Solution
+
+Tech Stack:
+- React JS (JSX)
+- React Router v6
+- Context API or Redux Toolkit
+- Material UI or Ant Design
+- Axios for API calls
+- LocalStorage for static mock API responses
+- Loader spinners + Dialog/Toast messages for all API actions
+
+Base URLs:
+- Client:  http://127.0.0.1:8000/client
+- Trainer: http://127.0.0.1:8000/trainer
+- Admin:   http://127.0.0.1:8000/admin
+
+----------------------------------------------------
+GLOBAL RULES
+----------------------------------------------------
+- Default course duration = 2 days (configurable later)
+- No IndexedDB
+- All pages must use API calls (mock static JSON initially)
+- Login password auto-filled
+- Role-based routing (Admin / Trainer / Client)
+- Status-based filtering using dropdowns
+- Reusable components (Cards, Tables, Dialogs, Forms)
+- Show loaders and success/error dialogs for all actions
+
+----------------------------------------------------
+SAMPLE DATA
+----------------------------------------------------
+Create 4 sample JSON records each for:
+- Trainers
+- Clients (with priority: High / Medium / Low)
+- Trainings
+- Training Requests
+- Open Slots
+- Conflicts
+
+----------------------------------------------------
+TRAINER MODULE
+----------------------------------------------------
+Left Menu:
+- Dashboard
+- Manage Availability
+- View All Trainings
+- Training Requests
+
+Trainer Dashboard:
+Top Cards:
+- Total Trainings
+- Completed Trainings
+- Upcoming Trainings
+- Open Slots
+
+Below Sections:
+1. Training Request List (table)
+2. Upcoming Training List (table)
+3. Open Slots List (table)
+
+Create Open Slot:
+- Button → Dialog
+- Select date range (From–To)
+  Example: 22 Jan → 30 Jan
+- Exclude unavailable dates (ex: 23, 24 Jan)
+- Start Time / End Time
+- Max Trainees
+- Status = Available
+- On submit → auto-generate slots for all valid dates
+
+Manage Availability Page:
+- List all slots
+- Actions: Update, Cancel
+
+View All Trainings Page:
+- Dropdown filter:
+  - Upcoming (default)
+  - In Progress
+  - Completed
+  - Rejected
+
+Training Requests Page:
+- List all requests
+- Actions:
+  - Approve
+  - Reject (mandatory rejection reason)
+
+----------------------------------------------------
+CLIENT MODULE
+----------------------------------------------------
+Left Menu:
+- Dashboard
+- Request Training
+- View All Trainings
+
+Client Dashboard:
+Top Cards:
+- Recent Completed Trainings
+- Upcoming Trainings
+- Active Requests
+
+Sections:
+1. Recent Completed Trainings – Table
+2. Upcoming Trainings – Table
+3. Card with "+" icon → Request New Training
+
+Request Training Page:
+- Course Name dropdown
+- Course Duration (auto = 2 days)
+- Course Details dropdown
+- Description textarea
+- Show hint suggestions while typing description
+- Buttons: Cancel, Submit
+
+View All Trainings Page:
+Top Cards:
+- Active Requests
+- Approved Trainings
+- Rejected Trainings
+- Rescheduled Trainings
+
+Dropdown filter → show training list with heading + table
+
+----------------------------------------------------
+ADMIN MODULE
+----------------------------------------------------
+Left Menu:
+- Dashboard
+- All Trainings
+- Pending Requests
+- Trainer List
+- Client List
+
+Admin Dashboard:
+Top Cards:
+- Training Pending
+- Scheduling Conflicts
+- Trainers Available
+- Total Open Slots
+
+Sections:
+1. Trainers Availability
+   - Collapse/Expand by trainer
+   - Show availability slots
+2. Scheduling Conflicts
+   - Table with Resolve button
+3. All Trainings
+   - Collapse/Expand listing
+4. Clients
+   - Collapse/Expand listing
+
+----------------------------------------------------
+ALL TRAININGS (ADMIN)
+----------------------------------------------------
+- Single page
+- Dropdown status filter
+- Populate table dynamically
+
+----------------------------------------------------
+PENDING REQUESTS (ADMIN)
+----------------------------------------------------
+Layout:
+training requested training name / course requested  with sub heading company name  - 
+Row 1:
+- Client Info Card:
+  - Client Name
+  - Priority
+  - Trainee Count
+  - Description
+- Trainer Info Card:
+  - Assigned Trainer
+  - Request Status
+  - Rejection Reason
+
+Row 2:
+- Client Requested Slots Card
+- Recommended Slots Card (checkbox list)
+
+Bottom Right Action Buttons:
+- View
+- Update Slots
+- Reschedule
+- Resolve Conflict
+- Approve
+- Reject
+
+----------------------------------------------------
+CONFLICT RESOLUTION RULES (CRITICAL)
+----------------------------------------------------
+Scenario:
+- Low priority client already booked:
+  - 27 Jan, 2–5 PM
+  - 28 Jan, 2–5 PM
+- High priority client requests the same slots
+
+Admin must be shown three options:
+-already booked slot match with any other client training request low,high,medium show label this slots already booked for client name with full information in collaps expand 
+Option 1:
+- Assign alternate slots to HIGH priority client
+- Low priority client remains unchanged
+
+Option 2:
+- Assign SAME slots to HIGH priority client
+- Use DIFFERENT available trainer
+
+Option 3:
+- Move LOW priority client to alternate slots
+- Assign original slots (27–28 Jan, 2–5 PM) to HIGH priority client
+- After move, both clients must have valid 2-day training
+
+Rules:
+- Recommended slots shown ONLY if requested slots unavailable
+- Allowed only when status = Pending or Rescheduled
+- All actions must update status and show confirmation dialog
+
+----------------------------------------------------
+ADMIN MANAGEMENT
+----------------------------------------------------
+Trainer List:
+- Full trainer profile
+- CRUD operations
+
+Client List:
+- Full client profile
+- Edit client priority
+
+Authentication:
+- Login page with auto-filled password
+- Role-based redirect after login
+
+----------------------------------------------------
+DELIVERABLE
+----------------------------------------------------
+- Clean, modular React JS code
+- Fully wired API calls using Axios
+- Mock JSON responses via LocalStorage
+- Responsive UI
+-do not complicate the project coding structure.
+
+
+
+
+python apis' 
+
+You are a senior Python backend engineer.
+
+Project Name:
+Update Life Lab Training Solution
+
+Tech Stack:
+- Python
+- FastAPI
+- Pydantic
+- JWT-based auth (mocked)
+- In-memory static JSON data (NO database)
+- CORS enabled for React frontend
+
+Base Routes:
+- /auth
+- /trainer
+- /client
+- /admin
+
+----------------------------------------------------
+GLOBAL RULES
+----------------------------------------------------
+- Default training duration = 2 days
+- No database (use in-memory lists / dicts)
+- APIs must return realistic production-like responses
+- Easy to replace static data with DB later
+- Login password auto-generated and auto-filled
+
+----------------------------------------------------
+DATA MODELS (Pydantic)
+----------------------------------------------------
+Create models for:
+- User (id, role, email, password)
+- TrainerProfile
+- ClientProfile (priority: High / Medium / Low)
+- OpenSlot
+- Training
+- TrainingRequest
+- ConflictRecord
+
+Create 4 sample records per entity.
+
+----------------------------------------------------
+AUTH APIs
+----------------------------------------------------
+POST /auth/login
+- Input: email, role
+- Output: token + user profile
+
+----------------------------------------------------
+TRAINER APIs
+----------------------------------------------------
+GET  /trainer/dashboard
+GET  /trainer/trainings
+GET  /trainer/requests
+
+POST /trainer/open-slots
+PUT  /trainer/open-slots/{slot_id}
+DELETE /trainer/open-slots/{slot_id}
+
+----------------------------------------------------
+CLIENT APIs
+----------------------------------------------------
+GET  /client/dashboard
+POST /client/request-training
+GET  /client/trainings
+
+----------------------------------------------------
+ADMIN APIs
+----------------------------------------------------
+GET  /admin/dashboard
+GET  /admin/trainings
+GET  /admin/pending-requests
+
+PUT  /admin/approve-request/{request_id}
+PUT  /admin/reject-request/{request_id}
+PUT  /admin/reschedule-request/{request_id}
+
+----------------------------------------------------
+CONFLICT RESOLUTION API
+----------------------------------------------------
+POST /admin/resolve-conflict
+
+Payload:
+- conflict_id
+- resolution_type (OPTION_1 | OPTION_2 | OPTION_3)
+- optional: new_slot_ids, new_trainer_id
+
+Resolution Logic:
+
+Option 1:
+- Assign alternate slots to HIGH priority client
+
+Option 2:
+- Assign same slots
+- Change trainer for HIGH priority client
+
+Option 3:
+- Move LOW priority client to alternate slots
+- Assign original slots to HIGH priority client
+
+----------------------------------------------------
+BUSINESS LOGIC RULES
+----------------------------------------------------
+- Validate slot availability
+- Training duration must always be 2 days
+- Generate recommended slots when unavailable
+- Conflict allowed only if status = Pending / Rescheduled
+- Maintain audit log:
+  - Old slots
+  - New slots
+  - Resolution type
+
+----------------------------------------------------
+ADMIN MANAGEMENT APIs
+----------------------------------------------------
+GET  /admin/trainers
+POST /admin/trainers
+PUT  /admin/trainers/{id}
+
+GET  /admin/clients
+PUT  /admin/clients/{id}/priority
+
+----------------------------------------------------
+DELIVERABLE
+----------------------------------------------------
+- Clean FastAPI project structure
+- Modular routers
+- Static in-memory data
+- Fully documented endpoints
+- Ready for React integration

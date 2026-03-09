@@ -1,0 +1,285 @@
+React.js Life Lab Training Solution – Cursor Prompt
+
+
+ - Trainer
+  - Client
+  - Admin
+
+-priority will be low ,high and medium for trainer rating and client rating (low ,high and medium)
+
+
+Trainer
+ - 
+
+
+Client
+-
+
+
+
+Admin
+- admin can 
+
+
+
+
+-project name update Life Lab Training Solution
+
+all training courses duration two days. and later on change.
+
+trainer (multiple keep 4 sample json )
+- trainer dashboard keep total training complete training, upcoming training, open slots at top card counts.
+- dashboard on below top card Training Requeste List, and Upcoming Training List , open slots list.
+- create open slot button click open dialog giv option for select date range from -to date like 22 jan to 30 jan and not availble 23,24 option to add. time start and end time maximum trainee with status as availble. on create availble slot button all slots should be created.
+- left menu option manage availability add page, where all created slots can be update and cancel.
+- left menu View All Trainings add page where all trainings with all possible status based on dropdown selection can see training IN progress, Upcoming,complted,Rejected, in one page default load with upcoming trainings.
+- left menu Training Request add page where training request display and trainer can reject with rejected reson and Approve for the requested slots.
+
+
+client (multiple keep 4 sample json )
+-left menu dashboard on top card count Recent Completed training , Upcoming Training, Active Request.
+Recent Completed training heading with listing data tables. and then upcoming training heading in new line data labe listing. in one row keep card first requst new traing plus icon create new traing redirect to Request Traing page.
+-left menu Request Training : Request Traing Session hedaing with Course Name dropdown, course duration, course details dropdown, description input area , on type in description suggest hint, button cancel, submit request.
+-left menu View All Trainings : add page where all trainings display top row card :active request traingng, :approved request by admin trainings, :Rejected training Request by admin, :rescheduled request by admin with text and count and  based on dropdown selection can see all traing with text heading with data tables listing. 
+
+
+admin (multiple keep 4 sample json )
+ left menu : dashboard : top row cards (Training pending, scheduling conflict, trainers availabile, total open slots) with text with count.
+                      and heading all trainers availability heading and collaps expand trainer name with other info on click each trainers name display added availability slots.
+                      heading scheduling conflict heading with listing recors in data table with action button to resolve conflict.
+                      heading all training with collps expand listing.
+                      heading clients with collaps expand listing.
+           :All Training: all training list with all possible status in one page with dropdown selection status based on selected status populate records in list.
+           
+           : Pending Requests      : first row keep two card client info with client name trainee count , descritpion all fields, trainer info card keep assigned trainer name Request Status , Rejection Reason , and second row first card client Requested Slots and second card recommenede slots. and bottom righ corner button view, update slots,reschedule request, conflict resolve, approve, Reject.
+
+        rule 1- Pending Request , course duration is two days,if client requested given (two days slots with date ,time ,slots ,trainer name,) 
+              -if not availabile then show recommended slots in checkbox with update slots button.
+              -if available do not show recommended and admin can direct approve, reject, reschedule only if status pending or rescheduled.
+             :conflicts resolved scenario :  -low priority client has booked on 22 jan 3 -6 pm another high priority client has requested training on 22 jan 3 -6 pm then admin will have option to 
+               option 1 - high priority client  will get another slots.
+               option 2 -  high priority client same slot with another trainer.
+               option 3 - allready booked low priority client request move to another slot.
+
+                  
+           
+
+           :Trainer list : with all possible fields
+           :client list : with all possible fields admin can change client priority with edit update action.
+           :create login creadentials for the trainer and client.
+
+
+login password auto filled.
+do not use index db use API call integrate api call for each pages with local api end point with static local storage response data later on add real api call with loader with dialog messages backend or fron end.
+/client and /admin http://127:0:0.1:8000
+
+
+
+
+
+
+
+
+Rule 1: Priority-Based Scheduling
+- If multiple clients request the same trainer and time slot:
+  - Use client priority score to resolve conflicts
+  - Highest-value client gets the slot
+
+Rule 2: High-Value Client Override
+- If Client B already scheduled a training session for multiple trainees
+- And Client A (higher priority) requests the same slot:
+  - Allocate the slot to Client A
+  - Notify Client B with reason
+  - Offer alternative time slots to Client B
+  - Notify Trainer and Admin
+
+Rule 4: Notification System
+- Notifications for:
+  - Trainer
+  - Client
+  - Admin
+- Notification types:
+  - Informational
+  - Warning
+  - Action required
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------
+Create a scalable, production-ready React.js application for a Live Lab Corporate Training Management Platform that supports Trainer, Trainee, Client, and Admin roles with role-based workflows, scheduling logic, and notifications.
+
+--------------------------------------------------
+OBJECTIVE
+--------------------------------------------------
+Build a system to automate corporate live lab trainings where:
+- Trainers deliver live training sessions
+- Trainees attend and complete trainings
+- Clients (companies) request and schedule trainings for up to 50 trainees per session
+- Admin oversees scheduling, conflicts, priorities, and notifications
+
+--------------------------------------------------
+USER ROLES & FUNCTIONALITY
+--------------------------------------------------
+
+1. TRAINER
+Purpose: Deliver training sessions
+
+Features:
+- Login and role-based dashboard
+- Create and manage availability:
+  - Date
+  - Time slots
+  - Maximum trainees per slot
+- Accept or reject training requests
+- Conduct training sessions
+- Mark training as:
+  - Completed
+  - Cancelled
+- View training history:
+  - Completed
+  - Cancelled
+  - Upcoming
+- Receive notifications for:
+  - New training requests
+  - Schedule changes
+  - Priority overrides
+
+--------------------------------------------------
+
+2. TRAINEE
+Purpose: Attend and complete training
+
+Features:
+- Login and role-based dashboard
+- View assigned training sessions
+- Attend live training sessions
+- Training status tracking:
+  - Upcoming
+  - Attended
+  - Completed
+  - Missed
+- View training history
+- Receive notifications for:
+  - Training confirmation
+  - Schedule updates
+  - Cancellations
+
+--------------------------------------------------
+
+3. CLIENT (Corporate Customer)
+Purpose: Request and schedule training for employees
+
+Features:
+- Login and role-based dashboard
+- Request training sessions:
+  - Select date and time
+  - Select trainer (optional)
+  - Assign up to 50 trainees per session
+- View training requests:
+  - Pending
+  - Approved
+  - Rejected
+  - Rescheduled
+- Client attributes:
+  - Client value score
+  - Client rating
+- View training history and invoices
+- Pricing model:
+  - ₹1000 lump-sum per training session
+- Receive notifications for:
+  - Approval or rejection
+  - Rescheduling due to priority conflicts
+
+--------------------------------------------------
+
+4. ADMIN
+Purpose: Platform control and conflict resolution
+
+Features:
+- Login and admin dashboard
+- Manage users:
+  - Trainers
+  - Trainees
+  - Clients
+- View all training schedules
+- Approve, reject, or override schedules
+- Monitor scheduling conflicts
+- Configure client priority scores
+- View system-wide notifications and logs
+
+--------------------------------------------------
+BUSINESS RULES & SCHEDULING LOGIC
+--------------------------------------------------
+
+Rule 1: Priority-Based Scheduling
+- If multiple clients request the same trainer and time slot:
+  - Use client priority score to resolve conflicts
+  - Highest-value client gets the slot
+
+Rule 2: High-Value Client Override
+- If Client B already scheduled a training session for multiple trainees
+- And Client A (higher priority) requests the same slot:
+  - Allocate the slot to Client A
+  - Notify Client B with reason
+  - Offer alternative time slots to Client B
+  - Notify Trainer and Admin
+
+Rule 4: Notification System
+- Notifications for:
+  - Trainer
+  - Trainee
+  - Client
+  - Admin
+- Notification types:
+  - Informational
+  - Warning
+  - Action required
+
+--------------------------------------------------
+TECHNICAL REQUIREMENTS
+--------------------------------------------------
+
+- React.js with functional components and hooks
+- React Router for navigation and protected routes
+- Role-based authorization
+- State management using Redux Toolkit or Context API
+- Modular folder structure:
+  - components/
+  - pages/
+  - services/
+  - utils/
+  - hooks/
+- Mock API layer (backend-ready)
+- Scheduling and priority logic in reusable utility functions
+- UI framework: Material UI or Ant Design
+
+--------------------------------------------------
+DELIVERABLES
+--------------------------------------------------
+
+- Clean and scalable project folder structure
+- Role-based dashboards:
+  - Trainer Dashboard
+  - Trainee Dashboard
+  - Client Dashboard
+  - Admin Dashboard
+- Scheduling and conflict-resolution logic
+- Notification system implementation
+- Reusable UI components (tables, modals, alerts)
+- Well-commented, production-quality React code
+
+
+
